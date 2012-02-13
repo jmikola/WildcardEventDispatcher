@@ -1,0 +1,19 @@
+{
+    "name": "jmikola/wildcard-event-dispatcher",
+    "type": "library",
+    "description": "Event dispatcher with support for wildcard patterns inspired by AMQP topic exchanges.",
+    "keywords": ["AMQP", "dispatcher", "event", "event dispatcher"],
+    "homepage": "https://github.com/jmikola/WildcardEventDispatcher",
+    "license": "MIT",
+    "authors": [
+        { "name": "Jeremy Mikola", "email": "jmikola@gmail.com" }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/event-dispatcher": ">=2.0-dev,<2.2-dev"
+    },
+    "autoload": {
+        "psr-0": { "Jmikola\\WildcardEventDispatcher": "" }
+    },
+    "target-dir": "Jmikola/WildcardEventDispatcher"
+}
