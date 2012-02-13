@@ -3,16 +3,13 @@
 <phpunit bootstrap="./tests/bootstrap.php" colors="true">
     <testsuites>
         <testsuite name="WildcardEventDispatcher Test Suite">
-            <directory>./tests/</directory>
+            <directory>./tests/Jmikola</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./tests</directory>
-            </exclude>
+            <directory>./src/Jmikola</directory>
         </whitelist>
     </filter>
 </phpunit>
