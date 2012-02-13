@@ -13,7 +13,6 @@
         "symfony/event-dispatcher": ">=2.0-dev,<2.2-dev"
     },
     "autoload": {
-        "psr-0": { "Jmikola\\WildcardEventDispatcher": "" }
+        "psr-0": { "Jmikola": "src/" }
     },
-    "target-dir": "Jmikola/WildcardEventDispatcher"
 }
