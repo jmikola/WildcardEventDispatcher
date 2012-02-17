@@ -5,7 +5,11 @@ with wildcard syntax inspired by AMQP topic exchanges. Listeners may be bound to
 a wildcard pattern and be notified if a dispatched event's name matches that
 pattern. Literal event name matching is still supported.
 
+If you are interested in using this library in a Symfony2 project, you may also
+want to take a look at the corresponding [bundle][].
+
   [Symfony2's interface]: https://github.com/symfony/EventDispatcher
+  [bundle]: https://github.com/jmikola/JmikolaWildcardEventDispatcherBundle
 
 ## Usage ##
 
