@@ -115,27 +115,53 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
          */
         $subscriber = new TestEventSubscriber();
 
-        $i = 0;
-        $defaultPriority = 0;
-        $numSubscribedEvents = count($subscriber->getSubscribedEvents());
+        $this->innerDispatcher->expects($this->at(0))
+            ->method('addListener')
+            ->with('core.request', array($subscriber, 'onRequest'), 0);
+        $this->innerDispatcher->expects($this->at(1))
+            ->method('addListener')
+            ->with('core.exception', array($subscriber, 'onException'), 10);
+        $this->innerDispatcher->expects($this->at(2))
+            ->method('addListener')
+            ->with('core.multi', array($subscriber, 'onMulti1'), 10);
+        $this->innerDispatcher->expects($this->at(3))
+            ->method('addListener')
+            ->with('core.multi', array($subscriber, 'onMulti2'), 20);
 
-        foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
-            $method = is_array($params) ? $params[0] : $params;
-            $priority = is_array($params) ? $params[1] : $defaultPriority;
+        $this->innerDispatcher->expects($this->at(4))
+            ->method('removeListener')
+            ->with('core.request', array($subscriber, 'onRequest'));
+        $this->innerDispatcher->expects($this->at(5))
+            ->method('removeListener')
+            ->with('core.exception', array($subscriber, 'onException'));
+        $this->innerDispatcher->expects($this->at(6))
+            ->method('removeListener')
+            ->with('core.multi', array($subscriber, 'onMulti1'));
+        $this->innerDispatcher->expects($this->at(7))
+            ->method('removeListener')
+            ->with('core.multi', array($subscriber, 'onMulti2'));
 
-            $this->innerDispatcher->expects($this->at($i))
-                ->method('addListener')
-                ->with($eventName, array($subscriber, $method), $priority);
 
-            $this->innerDispatcher->expects($this->at($numSubscribedEvents + $i))
-                ->method('removeListener')
-                ->with($eventName, array($subscriber, $method));
+        $this->dispatcher->addSubscriber($subscriber);
+        $this->dispatcher->removeSubscriber($subscriber);
+    }
 
-            ++$i;
-        }
+    private function mockListenerForSubscriber($i, $numSubscribedEvents, $eventName, $params, EventSubscriberInterface $subscriber)
+    {
+        $method = is_array($params) ? $params[0] : $params;
+        $priority = is_array($params) ? $params[1] : 0;
 
-        $this->dispatcher->addSubscriber($subscriber, $priority);
-        $this->dispatcher->removeSubscriber($subscriber, $priority);
+        var_dump($eventName, $method);
+
+        $this->innerDispatcher->expects($this->at($i))
+            ->method('addListener')
+            ->with($eventName, array($subscriber, $method), $priority);
+
+        $this->innerDispatcher->expects($this->at($numSubscribedEvents + $i))
+            ->method('removeListener')
+            ->with($eventName, array($subscriber, $method));
+
+        return ++$i;
     }
 
     private function getMockEventDispatcher()
@@ -151,6 +177,7 @@ class TestEventSubscriber implements EventSubscriberInterface
         return array(
             'core.request' => 'onRequest',
             'core.exception' => array('onException', 10),
+            'core.multi' => array(array('onMulti1', 10), array('onMulti2', 20)),
         );
     }
 }
