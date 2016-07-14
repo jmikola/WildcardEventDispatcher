@@ -7,7 +7,7 @@ use Jmikola\WildcardEventDispatcher\LazyListenerPattern;
 class LazyListenerPatternTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testConstructorRequiresListenerProviderCallback()
     {

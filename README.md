@@ -13,6 +13,17 @@ want to take a look at the corresponding [bundle][].
   [Symfony2's interface]: https://github.com/symfony/EventDispatcher
   [bundle]: https://github.com/jmikola/JmikolaWildcardEventDispatcherBundle
 
+### Install
+
+The package can be installed using [ Composer ](https://getcomposer.org/).
+Add the package to your `composer.json`.
+
+```
+"require": {
+    "jmikola/wildcard-event-dispatcher" : "1.*",
+}
+```
+
 ## Usage ##
 
 WildcardEventDispatcher implements EventDispatcherInterface and may be used as

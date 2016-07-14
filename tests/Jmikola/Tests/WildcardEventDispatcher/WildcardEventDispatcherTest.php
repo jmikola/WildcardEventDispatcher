@@ -148,7 +148,7 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
 
     private function getMockEventDispatcher()
     {
-        return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
     }
 }
 

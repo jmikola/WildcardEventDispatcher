@@ -127,7 +127,7 @@ class WildcardEventDispatcherFunctionalTest extends \PHPUnit_Framework_TestCase
     private function assertNumberListenersAdded($expected, $eventName = null)
     {
         return isset($eventName)
-            ? $this->assertEquals($expected, count($this->dispatcher->getListeners($eventName)))
+            ? $this->assertCount($expected, $this->dispatcher->getListeners($eventName))
             : $this->assertEquals($expected, array_sum(array_map('count', $this->dispatcher->getListeners())));
     }
 }
