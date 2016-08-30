@@ -1,7 +1,24 @@
 language: php
 
-php:
-  - 5.3
-  - 5.4
+git:
+    depth: 1
 
-before_script: composer install --dev
+sudo: false
+
+matrix:
+    fast_finish: true
+    include:
+        - php: 5.3
+          env: COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
+        - php: 5.4
+        - php: 5.5
+        - php: 5.6
+          env: COMPOSER_FLAGS="--prefer-stable"
+        - php: 7.0
+          env: COMPOSER_FLAGS="--dev"
+
+install:
+    - composer update $COMPOSER_FLAGS --no-interaction -vvv
+    - composer info symfony/event-dispatcher
+
+script: phpunit

@@ -27,7 +27,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @see EventDispatcherInterface::dispatch()
+     * {@inheritdoc}
      */
     public function dispatch($eventName, Event $event = null)
     {
@@ -37,7 +37,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @see EventDispatcherInterface::getListeners()
+     * {@inheritdoc}
      */
     public function getListeners($eventName = null)
     {
@@ -59,7 +59,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @see EventDispatcherInterface::hasListeners()
+     * {@inheritdoc}
      */
     public function hasListeners($eventName = null)
     {
@@ -67,7 +67,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @see EventDispatcherInterface::addListener()
+     * {@inheritdoc}
      */
     public function addListener($eventName, $listener, $priority = 0)
     {
@@ -77,7 +77,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @see EventDispatcherInterface::removeListener()
+     * {@inheritdoc}
      */
     public function removeListener($eventName, $listener)
     {
@@ -87,7 +87,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @see EventDispatcherInterface::addSubscriber()
+     * {@inheritdoc}
      */
     public function addSubscriber(EventSubscriberInterface $subscriber)
     {
@@ -105,7 +105,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     }
 
     /**
-     * @see EventDispatcherInterface::removeSubscriber()
+     * {@inheritdoc}
      */
     public function removeSubscriber(EventSubscriberInterface $subscriber)
     {
@@ -194,5 +194,13 @@ class WildcardEventDispatcher implements EventDispatcherInterface
                 unset($this->patterns[$eventPattern][$key]);
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getListenerPriority($eventName, $listener)
+    {
+        return $this->dispatcher->getListenerPriority($eventName, $listener);
     }
 }
