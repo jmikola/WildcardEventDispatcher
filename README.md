@@ -13,6 +13,21 @@ want to take a look at the corresponding [bundle][].
   [Symfony's interface]: https://github.com/symfony/EventDispatcher
   [bundle]: https://github.com/jmikola/JmikolaWildcardEventDispatcherBundle
 
+## Installation
+
+The library is published as a [package][] and is installable via [Composer][]:
+
+```
+$ composer require jmikola/wildcard-event-dispatcher=~1.0
+```
+
+  [package]: https://packagist.org/packages/jmikola/wildcard-event-dispatcher
+  [Composer]: http://getcomposer.org/
+
+### Compatibility
+
+This library requires Symfony 2.3 or above.
+
 ## Usage
 
 WildcardEventDispatcher implements EventDispatcherInterface and may be used as
