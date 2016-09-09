@@ -13,7 +13,7 @@ want to take a look at the corresponding [bundle][].
   [Symfony's interface]: https://github.com/symfony/EventDispatcher
   [bundle]: https://github.com/jmikola/JmikolaWildcardEventDispatcherBundle
 
-## Usage ##
+## Usage
 
 WildcardEventDispatcher implements EventDispatcherInterface and may be used as
 you would Symfony's standard EventDispatcher:
@@ -50,9 +50,9 @@ $dispatcher = new WildcardEventDispatcher(new EventDispatcher());
 
   [composes]: http://en.wikipedia.org/wiki/Object_composition
 
-## Wildcard Syntax ##
+## Wildcard Syntax
 
-### Single-word Wildcard ###
+### Single-word Wildcard
 
 Consider the scenario where the same listener is defined for multiple events,
 all of which share a common prefix:
@@ -90,7 +90,7 @@ and followed by another word. The matching of `core` alone may not make sense,
 but this is implemented in order to be consistent with AMQP. A trailing `*`
 after a non-empty sequence may match the preceding sequence sans `.*`.
 
-### Multi-word Wildcard ###
+### Multi-word Wildcard
 
 Suppose there was a `core` event in your application named `core.foo.bar`. The
 aforementioned `core.*` pattern would not catch this event. You could use:
@@ -130,7 +130,7 @@ $dispatcher = new WildcardEventDispatcher();
 $dispatcher->addListener('#', $allListener);
 ```
 
-### Additional Wildcard Documentation ###
+### Additional Wildcard Documentation
 
 When in doubt, the unit tests for `ListenerPattern` are a good resource for
 inferring how wildcards will be interpreted. This library aims to mimic the
