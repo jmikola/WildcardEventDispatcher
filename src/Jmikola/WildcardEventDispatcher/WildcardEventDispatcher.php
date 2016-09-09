@@ -16,7 +16,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * Constructor.
      *
-     * If an EventDispatcherInterface is not provided , a new EventDispatcher
+     * If an EventDispatcherInterface is not provided, a new EventDispatcher
      * will be composed.
      *
      * @param EventDispatcherInterface $dispatcher
