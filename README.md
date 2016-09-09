@@ -2,21 +2,21 @@
 
 [![Build Status](https://travis-ci.org/jmikola/WildcardEventDispatcher.png?branch=master)](https://travis-ci.org/jmikola/WildcardEventDispatcher)
 
-This library implements an event dispatcher, based on [Symfony2's interface][],
+This library implements an event dispatcher, based on [Symfony's interface][],
 with wildcard syntax inspired by AMQP topic exchanges. Listeners may be bound to
 a wildcard pattern and be notified if a dispatched event's name matches that
 pattern. Literal event name matching is still supported.
 
-If you are interested in using this library in a Symfony2 project, you may also
+If you are interested in using this library in a Symfony project, you may also
 want to take a look at the corresponding [bundle][].
 
-  [Symfony2's interface]: https://github.com/symfony/EventDispatcher
+  [Symfony's interface]: https://github.com/symfony/EventDispatcher
   [bundle]: https://github.com/jmikola/JmikolaWildcardEventDispatcherBundle
 
 ## Usage ##
 
 WildcardEventDispatcher implements EventDispatcherInterface and may be used as
-you would Symfony2's standard EventDispatcher:
+you would Symfony's standard EventDispatcher:
 
 ```php
 <?php
