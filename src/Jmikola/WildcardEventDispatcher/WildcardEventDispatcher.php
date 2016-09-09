@@ -195,4 +195,12 @@ class WildcardEventDispatcher implements EventDispatcherInterface
             }
         }
     }
+
+    /**
+     * @see EventDispatcherInterface::getListenerPriority()
+     */
+    public function getListenerPriority($eventName, $listener)
+    {
+        return $this->dispatcher->getListenerPriority($eventName, $listener);
+    }
 }
