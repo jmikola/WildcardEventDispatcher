@@ -15,7 +15,7 @@ class LazyListenerPattern extends ListenerPattern
      * @param string   $eventPattern
      * @param callback $listenerProvider
      * @param integer  $priority
-     * @throws InvalidArgumentException if the listener provider is not a callback
+     * @throws \InvalidArgumentException if the listener provider is not a callback
      */
     public function __construct($eventPattern, $listenerProvider, $priority = 0)
     {
