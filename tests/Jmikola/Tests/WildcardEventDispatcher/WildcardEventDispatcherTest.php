@@ -146,9 +146,43 @@ class EventDispatcherTest extends \PHPUnit_Framework_TestCase
         $this->dispatcher->removeSubscriber($subscriber);
     }
 
+    public function testGetListenerPriorityInvokesMethodOnInnerDispather()
+    {
+        if ( ! method_exists('Symfony\Component\EventDispatcher\EventDispatcherInterface', 'getListenerPriority')) {
+            $this->markTestSkipped('getListenerPriority() does not exist on EventDispatcherInterface');
+        }
+
+        $this->innerDispatcher->expects($this->once())
+            ->method('getListenerPriority')
+            ->with('core.request', 'callback')
+            ->will($this->returnValue(1));
+
+        $this->assertSame(1, $this->dispatcher->getListenerPriority('core.request', 'callback'));
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetListenerPriorityRequiresEventNameWithoutWildcards()
+    {
+        $this->dispatcher->getListenerPriority('core.*', 'callback');
+    }
+
+    /**
+     * @expectedException BadMethodCallException
+     */
+    public function testGetListenerPriorityRequiresMethodOnInnerDispather()
+    {
+        if (method_exists('Symfony\Component\EventDispatcher\EventDispatcherInterface', 'getListenerPriority')) {
+            $this->markTestSkipped('getListenerPriority() exists on EventDispatcherInterface');
+        }
+
+        $this->dispatcher->getListenerPriority('core.request', 'callback');
+    }
+
     private function getMockEventDispatcher()
     {
-        return $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        return $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
     }
 }
 

@@ -2,21 +2,36 @@
 
 [![Build Status](https://travis-ci.org/jmikola/WildcardEventDispatcher.png?branch=master)](https://travis-ci.org/jmikola/WildcardEventDispatcher)
 
-This library implements an event dispatcher, based on [Symfony2's interface][],
+This library implements an event dispatcher, based on [Symfony's interface][],
 with wildcard syntax inspired by AMQP topic exchanges. Listeners may be bound to
 a wildcard pattern and be notified if a dispatched event's name matches that
 pattern. Literal event name matching is still supported.
 
-If you are interested in using this library in a Symfony2 project, you may also
+If you are interested in using this library in a Symfony project, you may also
 want to take a look at the corresponding [bundle][].
 
-  [Symfony2's interface]: https://github.com/symfony/EventDispatcher
+  [Symfony's interface]: https://github.com/symfony/EventDispatcher
   [bundle]: https://github.com/jmikola/JmikolaWildcardEventDispatcherBundle
 
-## Usage ##
+## Installation
+
+The library is published as a [package][] and is installable via [Composer][]:
+
+```
+$ composer require jmikola/wildcard-event-dispatcher=~1.0
+```
+
+  [package]: https://packagist.org/packages/jmikola/wildcard-event-dispatcher
+  [Composer]: http://getcomposer.org/
+
+### Compatibility
+
+This library requires Symfony 2.3 or above.
+
+## Usage
 
 WildcardEventDispatcher implements EventDispatcherInterface and may be used as
-you would Symfony2's standard EventDispatcher:
+you would Symfony's standard EventDispatcher:
 
 ```php
 <?php
@@ -50,9 +65,9 @@ $dispatcher = new WildcardEventDispatcher(new EventDispatcher());
 
   [composes]: http://en.wikipedia.org/wiki/Object_composition
 
-## Wildcard Syntax ##
+## Wildcard Syntax
 
-### Single-word Wildcard ###
+### Single-word Wildcard
 
 Consider the scenario where the same listener is defined for multiple events,
 all of which share a common prefix:
@@ -90,7 +105,7 @@ and followed by another word. The matching of `core` alone may not make sense,
 but this is implemented in order to be consistent with AMQP. A trailing `*`
 after a non-empty sequence may match the preceding sequence sans `.*`.
 
-### Multi-word Wildcard ###
+### Multi-word Wildcard
 
 Suppose there was a `core` event in your application named `core.foo.bar`. The
 aforementioned `core.*` pattern would not catch this event. You could use:
@@ -130,7 +145,7 @@ $dispatcher = new WildcardEventDispatcher();
 $dispatcher->addListener('#', $allListener);
 ```
 
-### Additional Wildcard Documentation ###
+### Additional Wildcard Documentation
 
 When in doubt, the unit tests for `ListenerPattern` are a good resource for
 inferring how wildcards will be interpreted. This library aims to mimic the

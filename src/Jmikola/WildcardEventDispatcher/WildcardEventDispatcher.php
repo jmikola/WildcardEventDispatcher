@@ -16,7 +16,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * Constructor.
      *
-     * If an EventDispatcherInterface is not provided , a new EventDispatcher
+     * If an EventDispatcherInterface is not provided, a new EventDispatcher
      * will be composed.
      *
      * @param EventDispatcherInterface $dispatcher
@@ -194,5 +194,23 @@ class WildcardEventDispatcher implements EventDispatcherInterface
                 unset($this->patterns[$eventPattern][$key]);
             }
         }
+    }
+
+    /**
+     * @see EventDispatcherInterface::getListenerPriority()
+     * @throws \InvalidArgumentException if $eventName contains a wildcard pattern
+     * @throws \BadMethodCallException if this method is not implemented on the composed EventDispatcher
+     */
+    public function getListenerPriority($eventName, $listener)
+    {
+        if ($this->hasWildcards($eventName)) {
+            throw new \InvalidArgumentException('Wildcard patterns are not supported');
+        }
+
+        if ( ! method_exists($this->dispatcher, 'getListenerPriority')) {
+            throw new \BadMethodCallException('getListenerPriority() is not implemented');
+        }
+
+        return $this->dispatcher->getListenerPriority($eventName, $listener);
     }
 }
