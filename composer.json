@@ -13,7 +13,10 @@
         "symfony/event-dispatcher": "^2.3 || ^3.0"
     },
     "autoload": {
-        "psr-0": { "Jmikola": "src/" }
+        "psr-4": {
+            "Jmikola\\WildcardEventDispatcher\\": "src/Jmikola/WildcardEventDispatcher"
+            
+        }
     },
     "extra": {
         "branch-alias": {
