@@ -4,8 +4,9 @@ namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\WildcardEventDispatcher;
 use Symfony\Component\EventDispatcher\Event;
+use PHPUnit\Framework\TestCase;
 
-class WildcardEventDispatcherFunctionalTest extends \PHPUnit_Framework_TestCase
+class WildcardEventDispatcherFunctionalTest extends TestCase
 {
     const coreRequest = 'core.request';
     const coreException = 'core.exception';

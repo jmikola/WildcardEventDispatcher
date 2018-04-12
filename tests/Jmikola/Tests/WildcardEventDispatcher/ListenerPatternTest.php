@@ -3,8 +3,9 @@
 namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\ListenerPattern;
+use PHPUnit\Framework\TestCase;
 
-class ListenerPatternTest extends \PHPUnit_Framework_TestCase
+class ListenerPatternTest extends TestCase
 {
     /**
      * @dataProvider providePatternsAndMatches
