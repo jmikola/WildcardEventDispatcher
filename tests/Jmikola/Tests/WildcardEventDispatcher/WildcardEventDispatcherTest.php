@@ -4,8 +4,9 @@ namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\WildcardEventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use PHPUnit\Framework\TestCase;
 
-class EventDispatcherTest extends \PHPUnit_Framework_TestCase
+class EventDispatcherTest extends TestCase
 {
     private $dispatcher;
     private $innerDispatcher;

@@ -3,8 +3,9 @@
 namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\LazyListenerPattern;
+use PHPUnit\Framework\TestCase;
 
-class LazyListenerPatternTest extends \PHPUnit_Framework_TestCase
+class LazyListenerPatternTest extends TestCase
 {
     /**
      * @expectedException InvalidArgumentException
