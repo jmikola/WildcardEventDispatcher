@@ -12,18 +12,7 @@ class ListenerPattern
     protected $priority;
     protected $regex;
 
-    private static $replacements = array(
-        // Trailing single-wildcard with separator prefix
-        '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
-        // Single-wildcard with separator prefix
-        '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
-        // Single-wildcard without separator prefix
-        '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
-        // Multi-wildcard with separator prefix
-        '/\\\\\.#/'           => '(?:\.\w+)*',
-        // Multi-wildcard without separator prefix
-        '/(?<!\\\\\.)#/'      => '(?:|\w+(?:\.\w+)*)',
-    );
+    private static $replacements;
 
     /**
      * Constructor.
@@ -110,10 +99,52 @@ class ListenerPattern
      */
     private function createRegex($eventPattern)
     {
+        $replacements = self::getReplacements();
+
         return sprintf('/^%s$/', preg_replace(
-            array_keys(self::$replacements),
-            array_values(self::$replacements),
+            array_keys($replacements),
+            array_values($replacements),
             preg_quote($eventPattern, '/')
         ));
+    }
+
+    /**
+     * Returns preg_replace() replacements for preparing the event pattern.
+     *
+     * @return array
+     */
+    private static function getReplacements()
+    {
+        if (null !== self::$replacements) {
+            return self::$replacements;
+        }
+
+        self::$replacements = array(
+            // Trailing single-wildcard with separator prefix
+            '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
+            // Single-wildcard with separator prefix
+            '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
+            // Single-wildcard without separator prefix
+            '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
+        );
+
+        // preg_quote() escapes `#` in PHP 7.3+
+        if (PHP_VERSION_ID >= 70300) {
+            self::$replacements += array(
+                // Multi-wildcard with separator prefix
+                '/\\\\\.\\\\\#/'      => '(?:\.\w+)*',
+                // Multi-wildcard without separator prefix
+                '/(?<!\\\\\.)\\\\\#/' => '(?:|\w+(?:\.\w+)*)',
+            );
+        } else {
+            self::$replacements += array(
+                // Multi-wildcard with separator prefix
+                '/\\\\\.#/'      => '(?:\.\w+)*',
+                // Multi-wildcard without separator prefix
+                '/(?<!\\\\\.)#/' => '(?:|\w+(?:\.\w+)*)',
+            );
+        }
+
+        return self::$replacements;
     }
 }
