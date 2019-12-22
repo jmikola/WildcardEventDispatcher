@@ -33,7 +33,11 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     {
         $this->bindPatterns($eventName);
 
-        return $this->dispatcher->dispatch($eventName, $event);
+        if ($event === null) {
+            $event = new Event();
+        }
+
+        return $this->dispatcher->dispatch($event, $eventName);
     }
 
     /**

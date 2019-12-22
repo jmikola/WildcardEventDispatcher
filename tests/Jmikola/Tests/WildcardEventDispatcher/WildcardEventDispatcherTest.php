@@ -3,6 +3,7 @@
 namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\WildcardEventDispatcher;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -66,7 +67,7 @@ class EventDispatcherTest extends TestCase
         $this->innerDispatcher->expects($this->once())
             ->after('listener-is-added')
             ->method('dispatch')
-            ->with('core.request');
+            ->with(new Event(), 'core.request');
 
         $this->dispatcher->addListener('core.*', 'callback', 0);
         $this->dispatcher->dispatch('core.request');
