@@ -2,7 +2,6 @@
 
 namespace Jmikola\WildcardEventDispatcher;
 
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,17 +28,17 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::dispatch()
      */
-    public function dispatch($eventName, Event $event = null)
+    public function dispatch(object $event, string $eventName = null): object
     {
         $this->bindPatterns($eventName);
 
-        return $this->dispatcher->dispatch($eventName, $event);
+        return $this->dispatcher->dispatch($event, $eventName);
     }
 
     /**
      * @see EventDispatcherInterface::getListeners()
      */
-    public function getListeners($eventName = null)
+    public function getListeners(string $eventName = null)
     {
         if (null !== $eventName) {
             $this->bindPatterns($eventName);
@@ -61,7 +60,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::hasListeners()
      */
-    public function hasListeners($eventName = null)
+    public function hasListeners(string $eventName = null)
     {
         return (boolean) count($this->getListeners($eventName));
     }
@@ -69,7 +68,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::addListener()
      */
-    public function addListener($eventName, $listener, $priority = 0)
+    public function addListener(string $eventName, $listener, int $priority = 0)
     {
         return $this->hasWildcards($eventName)
             ? $this->addListenerPattern(new ListenerPattern($eventName, $listener, $priority))
@@ -79,7 +78,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::removeListener()
      */
-    public function removeListener($eventName, $listener)
+    public function removeListener(string $eventName, $listener)
     {
         return $this->hasWildcards($eventName)
             ? $this->removeListenerPattern($eventName, $listener)
@@ -201,7 +200,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
      * @throws \InvalidArgumentException if $eventName contains a wildcard pattern
      * @throws \BadMethodCallException if this method is not implemented on the composed EventDispatcher
      */
-    public function getListenerPriority($eventName, $listener)
+    public function getListenerPriority(string $eventName, $listener)
     {
         if ($this->hasWildcards($eventName)) {
             throw new \InvalidArgumentException('Wildcard patterns are not supported');
