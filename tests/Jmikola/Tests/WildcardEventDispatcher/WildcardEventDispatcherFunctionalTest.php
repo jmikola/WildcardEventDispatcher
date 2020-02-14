@@ -3,7 +3,7 @@
 namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\WildcardEventDispatcher;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use PHPUnit\Framework\TestCase;
 
 class WildcardEventDispatcherFunctionalTest extends TestCase
@@ -107,10 +107,10 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
         $this->dispatcher->addListener('*.exception', array($this->listener, 'onException'));
         $this->dispatcher->addListener(self::coreRequest, array($this->listener, 'onCoreRequest'));
 
-        $this->dispatcher->dispatch(self::coreRequest);
-        $this->dispatcher->dispatch(self::coreException);
-        $this->dispatcher->dispatch(self::apiRequest);
-        $this->dispatcher->dispatch(self::apiException);
+        $this->dispatcher->dispatch(new Event(), self::coreRequest);
+        $this->dispatcher->dispatch(new Event(), self::coreException);
+        $this->dispatcher->dispatch(new Event(), self::apiRequest);
+        $this->dispatcher->dispatch(new Event(), self::apiException);
 
         $this->assertEquals(4, $this->listener->onAnyInvoked);
         $this->assertEquals(2, $this->listener->onCoreInvoked);

@@ -5,6 +5,7 @@ namespace Jmikola\Tests\WildcardEventDispatcher;
 use Jmikola\WildcardEventDispatcher\WildcardEventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class EventDispatcherTest extends TestCase
 {
@@ -58,6 +59,8 @@ class EventDispatcherTest extends TestCase
 
     public function testShouldAddListenersWithWildcardsWhenMatchingEventIsDispatched()
     {
+        $event = new Event();
+
         $this->innerDispatcher->expects($this->once())
             ->id('listener-is-added')
             ->method('addListener')
@@ -66,10 +69,10 @@ class EventDispatcherTest extends TestCase
         $this->innerDispatcher->expects($this->once())
             ->after('listener-is-added')
             ->method('dispatch')
-            ->with('core.request');
+            ->with($event, 'core.request');
 
         $this->dispatcher->addListener('core.*', 'callback', 0);
-        $this->dispatcher->dispatch('core.request');
+        $this->dispatcher->dispatch($event, 'core.request');
     }
 
     public function testShouldAddListenersWithWildcardsWhenListenersForMatchingEventsAreRetrieved()
