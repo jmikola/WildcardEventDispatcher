@@ -31,7 +31,13 @@ class WildcardEventDispatcher implements EventDispatcherInterface
      */
     public function dispatch($event, string $eventName = null): object
     {
-        $this->bindPatterns($eventName);
+        /* The event object's FQCN is used in lieu of an event name; however, it
+         * is not compatible with the wildcard syntax used by this library. As
+         * such, there is no reason to attempt to bind the FQCN to any
+         * registered patterns. */
+        if (null !== $eventName) {
+            $this->bindPatterns($eventName);
+        }
 
         return $this->dispatcher->dispatch($event, $eventName);
     }
