@@ -24,7 +24,7 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
 
     public function testInitialState()
     {
-        $this->assertEquals(array(), $this->dispatcher->getListeners());
+        $this->assertEquals([], $this->dispatcher->getListeners());
         $this->assertFalse($this->dispatcher->hasListeners(self::coreRequest));
         $this->assertFalse($this->dispatcher->hasListeners(self::coreException));
         $this->assertFalse($this->dispatcher->hasListeners(self::apiRequest));
@@ -33,10 +33,10 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
 
     public function testAddingAndRemovingListeners()
     {
-        $this->dispatcher->addListener('#', array($this->listener, 'onAny'));
-        $this->dispatcher->addListener('core.*', array($this->listener, 'onCore'));
-        $this->dispatcher->addListener('*.exception', array($this->listener, 'onException'));
-        $this->dispatcher->addListener(self::coreRequest, array($this->listener, 'onCoreRequest'));
+        $this->dispatcher->addListener('#', [$this->listener, 'onAny']);
+        $this->dispatcher->addListener('core.*', [$this->listener, 'onCore']);
+        $this->dispatcher->addListener('*.exception', [$this->listener, 'onException']);
+        $this->dispatcher->addListener(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
         $this->assertNumberListenersAdded(3, self::coreRequest);
         $this->assertNumberListenersAdded(3, self::coreException);
@@ -44,7 +44,7 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
         $this->assertNumberListenersAdded(2, self::apiException);
         $this->assertNumberListenersAdded(9);
 
-        $this->dispatcher->removeListener('#', array($this->listener, 'onAny'));
+        $this->dispatcher->removeListener('#', [$this->listener, 'onAny']);
 
         $this->assertNumberListenersAdded(2, self::coreRequest);
         $this->assertNumberListenersAdded(2, self::coreException);
@@ -52,7 +52,7 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
         $this->assertNumberListenersAdded(1, self::apiException);
         $this->assertNumberListenersAdded(5);
 
-        $this->dispatcher->removeListener('core.*', array($this->listener, 'onCore'));
+        $this->dispatcher->removeListener('core.*', [$this->listener, 'onCore']);
 
         $this->assertNumberListenersAdded(1, self::coreRequest);
         $this->assertNumberListenersAdded(1, self::coreException);
@@ -60,7 +60,7 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
         $this->assertNumberListenersAdded(1, self::apiException);
         $this->assertNumberListenersAdded(3);
 
-        $this->dispatcher->removeListener('*.exception', array($this->listener, 'onException'));
+        $this->dispatcher->removeListener('*.exception', [$this->listener, 'onException']);
 
         $this->assertNumberListenersAdded(1, self::coreRequest);
         $this->assertNumberListenersAdded(0, self::coreException);
@@ -68,7 +68,7 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
         $this->assertNumberListenersAdded(0, self::apiException);
         $this->assertNumberListenersAdded(1);
 
-        $this->dispatcher->removeListener(self::coreRequest, array($this->listener, 'onCoreRequest'));
+        $this->dispatcher->removeListener(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
         $this->assertNumberListenersAdded(0, self::coreRequest);
         $this->assertNumberListenersAdded(0, self::coreException);
@@ -79,7 +79,7 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
 
     public function testAddedListenersWithWildcardsAreRegisteredLazily()
     {
-        $this->dispatcher->addListener('#', array($this->listener, 'onAny'));
+        $this->dispatcher->addListener('#', [$this->listener, 'onAny']);
 
         $this->assertNumberListenersAdded(0);
 
@@ -102,10 +102,10 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
 
     public function testDispatch()
     {
-        $this->dispatcher->addListener('#', array($this->listener, 'onAny'));
-        $this->dispatcher->addListener('core.*', array($this->listener, 'onCore'));
-        $this->dispatcher->addListener('*.exception', array($this->listener, 'onException'));
-        $this->dispatcher->addListener(self::coreRequest, array($this->listener, 'onCoreRequest'));
+        $this->dispatcher->addListener('#', [$this->listener, 'onAny']);
+        $this->dispatcher->addListener('core.*', [$this->listener, 'onCore']);
+        $this->dispatcher->addListener('*.exception', [$this->listener, 'onException']);
+        $this->dispatcher->addListener(self::coreRequest, [$this->listener, 'onCoreRequest']);
 
         $this->dispatcher->dispatch(new Event(), self::coreRequest);
         $this->dispatcher->dispatch(new Event(), self::coreException);

@@ -9,8 +9,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class WildcardEventDispatcher implements EventDispatcherInterface
 {
     private $dispatcher;
-    private $patterns = array();
-    private $syncedEvents = array();
+    private $patterns = [];
+    private $syncedEvents = [];
 
     /**
      * Constructor.
@@ -92,12 +92,12 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
             if (is_string($params)) {
-                $this->addListener($eventName, array($subscriber, $params));
+                $this->addListener($eventName, [$subscriber, $params]);
             } elseif (is_string($params[0])) {
-                $this->addListener($eventName, array($subscriber, $params[0]), isset($params[1]) ? $params[1] : 0);
+                $this->addListener($eventName, [$subscriber, $params[0]], $params[1] ?? 0);
             } else {
                 foreach ($params as $listener) {
-                    $this->addListener($eventName, array($subscriber, $listener[0]), isset($listener[1]) ? $listener[1] : 0);
+                    $this->addListener($eventName, [$subscriber, $listener[0]], $listener[1] ?? 0);
                 }
             }
         }
@@ -111,10 +111,10 @@ class WildcardEventDispatcher implements EventDispatcherInterface
         foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
             if (is_array($params) && is_array($params[0])) {
                 foreach ($params as $listener) {
-                    $this->removeListener($eventName, array($subscriber, $listener[0]));
+                    $this->removeListener($eventName, [$subscriber, $listener[0]]);
                 }
             } else {
-                $this->removeListener($eventName, array($subscriber, is_string($params) ? $params : $params[0]));
+                $this->removeListener($eventName, [$subscriber, is_string($params) ? $params : $params[0]]);
             }
         }
     }

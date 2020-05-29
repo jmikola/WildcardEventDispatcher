@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ListenerPattern
 {
     protected $eventPattern;
-    protected $events = array();
+    protected $events = [];
     protected $listener;
     protected $priority;
     protected $regex;
@@ -77,7 +77,7 @@ class ListenerPattern
             $dispatcher->removeListener($eventName, $this->getListener());
         }
 
-        $this->events = array();
+        $this->events = [];
     }
 
     /**
@@ -119,30 +119,30 @@ class ListenerPattern
             return self::$replacements;
         }
 
-        self::$replacements = array(
+        self::$replacements = [
             // Trailing single-wildcard with separator prefix
             '/\\\\\.\\\\\*$/'     => '(?:\.\w+)?',
             // Single-wildcard with separator prefix
             '/\\\\\.\\\\\*/'      => '(?:\.\w+)',
             // Single-wildcard without separator prefix
             '/(?<!\\\\\.)\\\\\*/' => '(?:\w+)',
-        );
+        ];
 
         // preg_quote() escapes `#` in PHP 7.3+
         if (PHP_VERSION_ID >= 70300) {
-            self::$replacements += array(
+            self::$replacements += [
                 // Multi-wildcard with separator prefix
                 '/\\\\\.\\\\\#/'      => '(?:\.\w+)*',
                 // Multi-wildcard without separator prefix
                 '/(?<!\\\\\.)\\\\\#/' => '(?:|\w+(?:\.\w+)*)',
-            );
+            ];
         } else {
-            self::$replacements += array(
+            self::$replacements += [
                 // Multi-wildcard with separator prefix
                 '/\\\\\.#/'      => '(?:\.\w+)*',
                 // Multi-wildcard without separator prefix
                 '/(?<!\\\\\.)#/' => '(?:|\w+(?:\.\w+)*)',
-            );
+            ];
         }
 
         return self::$replacements;
