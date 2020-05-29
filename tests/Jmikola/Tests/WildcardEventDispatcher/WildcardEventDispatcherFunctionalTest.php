@@ -3,8 +3,8 @@
 namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\WildcardEventDispatcher;
-use Symfony\Contracts\EventDispatcher\Event;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class WildcardEventDispatcherFunctionalTest extends TestCase
 {
@@ -16,7 +16,7 @@ class WildcardEventDispatcherFunctionalTest extends TestCase
     private $dispatcher;
     private $listener;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dispatcher = new WildcardEventDispatcher();
         $this->listener = new TestEventListener();

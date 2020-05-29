@@ -4,14 +4,13 @@ namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\LazyListenerPattern;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
 class LazyListenerPatternTest extends TestCase
 {
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testConstructorRequiresListenerProviderCallback()
     {
+        $this->expectException(InvalidArgumentException::class);
         new LazyListenerPattern('*', null);
     }
 
