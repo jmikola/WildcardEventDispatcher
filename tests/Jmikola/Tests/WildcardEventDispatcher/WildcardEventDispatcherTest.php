@@ -3,15 +3,17 @@
 namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\WildcardEventDispatcher;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use InvalidArgumentException;
 
 class EventDispatcherTest extends TestCase
 {
     private $dispatcher;
     private $innerDispatcher;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->innerDispatcher = $this->getMockEventDispatcher();
         $this->dispatcher = new WildcardEventDispatcher($this->innerDispatcher);
@@ -58,6 +60,8 @@ class EventDispatcherTest extends TestCase
 
     public function testShouldAddListenersWithWildcardsWhenMatchingEventIsDispatched()
     {
+        $event = new Event();
+
         $this->innerDispatcher->expects($this->once())
             ->id('listener-is-added')
             ->method('addListener')
@@ -66,10 +70,10 @@ class EventDispatcherTest extends TestCase
         $this->innerDispatcher->expects($this->once())
             ->after('listener-is-added')
             ->method('dispatch')
-            ->with('core.request');
+            ->with($event, 'core.request');
 
         $this->dispatcher->addListener('core.*', 'callback', 0);
-        $this->dispatcher->dispatch('core.request');
+        $this->dispatcher->dispatch($event, 'core.request');
     }
 
     public function testShouldAddListenersWithWildcardsWhenListenersForMatchingEventsAreRetrieved()
@@ -149,10 +153,6 @@ class EventDispatcherTest extends TestCase
 
     public function testGetListenerPriorityInvokesMethodOnInnerDispather()
     {
-        if ( ! method_exists('Symfony\Component\EventDispatcher\EventDispatcherInterface', 'getListenerPriority')) {
-            $this->markTestSkipped('getListenerPriority() does not exist on EventDispatcherInterface');
-        }
-
         $this->innerDispatcher->expects($this->once())
             ->method('getListenerPriority')
             ->with('core.request', 'callback')
@@ -161,24 +161,10 @@ class EventDispatcherTest extends TestCase
         $this->assertSame(1, $this->dispatcher->getListenerPriority('core.request', 'callback'));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testGetListenerPriorityRequiresEventNameWithoutWildcards()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->dispatcher->getListenerPriority('core.*', 'callback');
-    }
-
-    /**
-     * @expectedException BadMethodCallException
-     */
-    public function testGetListenerPriorityRequiresMethodOnInnerDispather()
-    {
-        if (method_exists('Symfony\Component\EventDispatcher\EventDispatcherInterface', 'getListenerPriority')) {
-            $this->markTestSkipped('getListenerPriority() exists on EventDispatcherInterface');
-        }
-
-        $this->dispatcher->getListenerPriority('core.request', 'callback');
     }
 
     private function getMockEventDispatcher()
