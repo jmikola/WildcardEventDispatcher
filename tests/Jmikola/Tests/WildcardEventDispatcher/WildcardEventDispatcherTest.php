@@ -8,7 +8,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use InvalidArgumentException;
 
-class EventDispatcherTest extends TestCase
+class WildcardEventDispatcherTest extends TestCase
 {
     private $dispatcher;
     private $innerDispatcher;
@@ -61,37 +61,43 @@ class EventDispatcherTest extends TestCase
     public function testShouldAddListenersWithWildcardsWhenMatchingEventIsDispatched()
     {
         $event = new Event();
+        $listener = function() {};
+        $priority = 0;
 
         $this->innerDispatcher->expects($this->once())
             ->id('listener-is-added')
             ->method('addListener')
-            ->with('core.request', 'callback', 0);
+            ->with('core.request', $listener, $priority);
 
         $this->innerDispatcher->expects($this->once())
             ->after('listener-is-added')
             ->method('dispatch')
-            ->with($event, 'core.request');
+            ->with($event, 'core.request')
+            ->will($this->returnValue($event));
 
-        $this->dispatcher->addListener('core.*', 'callback', 0);
+        $this->dispatcher->addListener('core.*', $listener, $priority);
         $this->dispatcher->dispatch($event, 'core.request');
     }
 
     public function testShouldAddListenersWithWildcardsWhenListenersForMatchingEventsAreRetrieved()
     {
+        $listener = function() {};
+        $priority = 0;
+
         $this->innerDispatcher->expects($this->once())
             ->id('listener-is-added')
             ->method('addListener')
-            ->with('core.request', 'callback', 0);
+            ->with('core.request', $listener, $priority);
 
         $this->innerDispatcher->expects($this->once())
             ->after('listener-is-added')
             ->method('getListeners')
             ->with('core.request')
-            ->will($this->returnValue(array('callback')));
+            ->will($this->returnValue([$listener]));
 
-        $this->dispatcher->addListener('core.*', 'callback', 0);
+        $this->dispatcher->addListener('core.*', $listener, $priority);
 
-        $this->assertEquals(array('callback'), $this->dispatcher->getListeners('core.request'));
+        $this->assertEquals([$listener], $this->dispatcher->getListeners('core.request'));
     }
 
     public function testShouldNotCountWildcardListenersThatHaveNeverBeenMatchedWhenAllListenersAreRetrieved()
@@ -109,7 +115,7 @@ class EventDispatcherTest extends TestCase
             ->method('getListeners')
             ->will($this->returnValue([]));
 
-        $this->dispatcher->addListener('core.*', 'callback', 0);
+        $this->dispatcher->addListener('core.*', function() {}, 0);
         $this->assertEquals([], $this->dispatcher->getListeners());
     }
 
@@ -153,18 +159,20 @@ class EventDispatcherTest extends TestCase
 
     public function testGetListenerPriorityInvokesMethodOnInnerDispather()
     {
+        $listener = function() {};
+
         $this->innerDispatcher->expects($this->once())
             ->method('getListenerPriority')
-            ->with('core.request', 'callback')
+            ->with('core.request', $listener)
             ->will($this->returnValue(1));
 
-        $this->assertSame(1, $this->dispatcher->getListenerPriority('core.request', 'callback'));
+        $this->assertSame(1, $this->dispatcher->getListenerPriority('core.request', $listener));
     }
 
     public function testGetListenerPriorityRequiresEventNameWithoutWildcards()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->dispatcher->getListenerPriority('core.*', 'callback');
+        $this->dispatcher->getListenerPriority('core.*', function() {});
     }
 
     private function getMockEventDispatcher()

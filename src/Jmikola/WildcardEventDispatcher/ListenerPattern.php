@@ -18,10 +18,10 @@ class ListenerPattern
      * Constructor.
      *
      * @param string   $eventPattern
-     * @param callback $listener
+     * @param callable $listener
      * @param integer  $priority
      */
-    public function __construct($eventPattern, $listener, $priority = 0)
+    public function __construct(string $eventPattern, callable $listener, int $priority = 0)
     {
         $this->eventPattern = $eventPattern;
         $this->listener = $listener;
@@ -34,7 +34,7 @@ class ListenerPattern
      *
      * @return string
      */
-    public function getEventPattern()
+    public function getEventPattern(): string
     {
         return $this->eventPattern;
     }
@@ -42,9 +42,9 @@ class ListenerPattern
     /**
      * Get the listener.
      *
-     * @return callback
+     * @return callable
      */
-    public function getListener()
+    public function getListener(): callable
     {
         return $this->listener;
     }
@@ -55,7 +55,7 @@ class ListenerPattern
      * @param EventDispatcherInterface $dispatcher
      * @param string                   $eventName
      */
-    public function bind(EventDispatcherInterface $dispatcher, $eventName)
+    public function bind(EventDispatcherInterface $dispatcher, string $eventName): void
     {
         if (isset($this->events[$eventName])) {
             return;
@@ -71,7 +71,7 @@ class ListenerPattern
      *
      * @param EventDispatcherInterface $dispatcher
      */
-    public function unbind(EventDispatcherInterface $dispatcher)
+    public function unbind(EventDispatcherInterface $dispatcher): void
     {
         foreach ($this->events as $eventName => $_) {
             $dispatcher->removeListener($eventName, $this->getListener());
@@ -86,7 +86,7 @@ class ListenerPattern
      * @param string $eventName
      * @return boolean
      */
-    public final function test($eventName)
+    public final function test(string $eventName): bool
     {
         return (boolean) preg_match($this->regex, $eventName);
     }
@@ -97,7 +97,7 @@ class ListenerPattern
      * @param string $eventPattern
      * @return string
      */
-    private function createRegex($eventPattern)
+    private function createRegex(string $eventPattern): string
     {
         $replacements = self::getReplacements();
 
@@ -113,7 +113,7 @@ class ListenerPattern
      *
      * @return array
      */
-    private static function getReplacements()
+    private static function getReplacements(): array
     {
         if (null !== self::$replacements) {
             return self::$replacements;

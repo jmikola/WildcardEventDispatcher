@@ -12,7 +12,7 @@ class ListenerPatternTest extends TestCase
      */
     public function testPatternMatching($eventPattern, array $expectedMatches, array $expectedMisses)
     {
-        $pattern = new ListenerPattern($eventPattern, null);
+        $pattern = new ListenerPattern($eventPattern, function() {});
 
         foreach ($expectedMatches as $eventName) {
             $this->assertTrue($pattern->test($eventName), sprintf('Pattern "%s" should match event "%s"', $eventPattern, $eventName));
@@ -71,7 +71,9 @@ class ListenerPatternTest extends TestCase
 
     public function testDispatcherBinding()
     {
-        $pattern = new ListenerPattern('core.*', $listener = 'callback', $priority = 0);
+        $listener = function() {};
+        $priority = 0;
+        $pattern = new ListenerPattern('core.*', $listener, $priority);
 
         $dispatcher = $this->getMockEventDispatcher();
 
