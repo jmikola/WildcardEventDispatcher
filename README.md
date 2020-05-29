@@ -18,7 +18,7 @@ want to take a look at the corresponding [bundle][].
 The library is published as a [package][] and is installable via [Composer][]:
 
 ```
-$ composer require jmikola/wildcard-event-dispatcher=~1.0
+$ composer require jmikola/wildcard-event-dispatcher=^2.0
 ```
 
   [package]: https://packagist.org/packages/jmikola/wildcard-event-dispatcher
@@ -26,7 +26,7 @@ $ composer require jmikola/wildcard-event-dispatcher=~1.0
 
 ### Compatibility
 
-This library requires Symfony 2.3 or above.
+This library requires Symfony 4.3 or above.
 
 ## Usage
 
