@@ -9,21 +9,19 @@ class LazyListenerPattern extends ListenerPattern
     /**
      * Constructor.
      *
-     * The $listenerProvider argument should be a callback which, when invoked,
-     * returns the listener callback.
+     * The $listenerProvider argument should be a callable which, when invoked,
+     * returns the listener callable.
      *
      * @param string   $eventPattern
-     * @param callback $listenerProvider
+     * @param callable $listenerProvider
      * @param integer  $priority
-     * @throws \InvalidArgumentException if the listener provider is not a callback
      */
-    public function __construct($eventPattern, $listenerProvider, $priority = 0)
+    public function __construct(string $eventPattern, callable $listenerProvider, int $priority = 0)
     {
-        if (!is_callable($listenerProvider)) {
-            throw new \InvalidArgumentException('Listener provider argument must be a callback');
-        }
-
-        parent::__construct($eventPattern, null, $priority);
+        /* Since ListenerPattern requires a callable, we'll use the getListener
+         * method as a placeholder. Later, we can replace it with the actual
+         * listener from the provider callable. */
+        parent::__construct($eventPattern, [$this, 'getListener'], $priority);
 
         $this->listenerProvider = $listenerProvider;
     }
@@ -31,11 +29,11 @@ class LazyListenerPattern extends ListenerPattern
     /**
      * Get the pattern listener, initializing it lazily from its provider.
      *
-     * @return callback
+     * @return callable
      */
-    public function getListener()
+    public function getListener(): callable
     {
-        if (!isset($this->listener) && isset($this->listenerProvider)) {
+        if ($this->listener === [$this, 'getListener']) {
             $this->listener = call_user_func($this->listenerProvider);
             unset($this->listenerProvider);
         }

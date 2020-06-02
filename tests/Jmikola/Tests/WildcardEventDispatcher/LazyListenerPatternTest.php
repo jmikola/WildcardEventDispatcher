@@ -4,31 +4,25 @@ namespace Jmikola\Tests\WildcardEventDispatcher;
 
 use Jmikola\WildcardEventDispatcher\LazyListenerPattern;
 use PHPUnit\Framework\TestCase;
-use InvalidArgumentException;
 
 class LazyListenerPatternTest extends TestCase
 {
-    public function testConstructorRequiresListenerProviderCallback()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new LazyListenerPattern('*', null);
-    }
-
     public function testLazyListenerInitialization()
     {
         $listenerProviderInvoked = 0;
+        $listener = function() {};
 
-        $listenerProvider = function() use (&$listenerProviderInvoked) {
+        $listenerProvider = function() use (&$listenerProviderInvoked, $listener) {
             ++$listenerProviderInvoked;
-            return 'callback';
+            return $listener;
         };
 
         $pattern = new LazyListenerPattern('*', $listenerProvider);
 
         $this->assertEquals(0, $listenerProviderInvoked, 'The listener provider should not be invoked until the listener is requested');
-        $this->assertEquals('callback', $pattern->getListener());
+        $this->assertSame($listener, $pattern->getListener());
         $this->assertEquals(1, $listenerProviderInvoked, 'The listener provider should be invoked when the listener is requested');
-        $this->assertEquals('callback', $pattern->getListener());
+        $this->assertSame($listener, $pattern->getListener());
         $this->assertEquals(1, $listenerProviderInvoked, 'The listener provider should only be invoked once');
     }
 }

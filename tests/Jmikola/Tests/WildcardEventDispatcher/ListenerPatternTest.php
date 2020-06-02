@@ -12,7 +12,7 @@ class ListenerPatternTest extends TestCase
      */
     public function testPatternMatching($eventPattern, array $expectedMatches, array $expectedMisses)
     {
-        $pattern = new ListenerPattern($eventPattern, null);
+        $pattern = new ListenerPattern($eventPattern, function() {});
 
         foreach ($expectedMatches as $eventName) {
             $this->assertTrue($pattern->test($eventName), sprintf('Pattern "%s" should match event "%s"', $eventPattern, $eventName));
@@ -25,53 +25,55 @@ class ListenerPatternTest extends TestCase
 
     public function providePatternsAndMatches()
     {
-        return array(
-            array(
+        return [
+            [
                 '*',
-                array('core', 'api', 'v2'),
-                array('', 'core.request'),
-            ),
-            array(
+                ['core', 'api', 'v2'],
+                ['', 'core.request'],
+            ],
+            [
                 '*.exception',
-                array('core.exception', 'api.exception'),
-                array('core', 'api.exception.internal'),
-            ),
-            array(
+                ['core.exception', 'api.exception'],
+                ['core', 'api.exception.internal'],
+            ],
+            [
                 'core.*',
-                array('core', 'core.request', 'core.v2'),
-                array('api', 'core.exception.internal'),
-            ),
-            array(
+                ['core', 'core.request', 'core.v2'],
+                ['api', 'core.exception.internal'],
+            ],
+            [
                 'api.*.*',
-                array('api.exception', 'api.exception.internal'),
-                array('api', 'core'),
-            ),
-            array(
+                ['api.exception', 'api.exception.internal'],
+                ['api', 'core'],
+            ],
+            [
                 '#',
-                array('core', 'core.request', 'api.exception.internal', 'api.v2'),
-                array(),
-            ),
-            array(
+                ['core', 'core.request', 'api.exception.internal', 'api.v2'],
+                [],
+            ],
+            [
                 'api.#.created',
-                array('api.created', 'api.user.created', 'api.v2.user.created'),
-                array('core.created', 'core.user.created', 'core.api.user.created'),
-            ),
-            array(
+                ['api.created', 'api.user.created', 'api.v2.user.created'],
+                ['core.created', 'core.user.created', 'core.api.user.created'],
+            ],
+            [
                 'api.*.cms.#',
-                array('api.v2.cms', 'api.v2.cms.post', 'api.v2.cms.post.created'),
-                array('api.v2', 'core.request.cms'),
-            ),
-            array(
+                ['api.v2.cms', 'api.v2.cms.post', 'api.v2.cms.post.created'],
+                ['api.v2', 'core.request.cms'],
+            ],
+            [
                 'api.#.post.*',
-                array('api.post', 'api.post.created', 'api.v2.cms.post.created'),
-                array('api', 'api.user', 'core.api.post.created'),
-            ),
-        );
+                ['api.post', 'api.post.created', 'api.v2.cms.post.created'],
+                ['api', 'api.user', 'core.api.post.created'],
+            ],
+        ];
     }
 
     public function testDispatcherBinding()
     {
-        $pattern = new ListenerPattern('core.*', $listener = 'callback', $priority = 0);
+        $listener = function() {};
+        $priority = 0;
+        $pattern = new ListenerPattern('core.*', $listener, $priority);
 
         $dispatcher = $this->getMockEventDispatcher();
 
