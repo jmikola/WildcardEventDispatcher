@@ -191,4 +191,7 @@ class TestEventSubscriber implements EventSubscriberInterface
             'core.multi' => [['onMulti1', 10], ['onMulti2', 20]],
         ];
     }
+
+    #[\ReturnTypeWillChange]
+    public function __call(string $name, array $arguments) {}
 }

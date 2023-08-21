@@ -84,11 +84,11 @@ class ListenerPattern
      * Tests if this pattern matches and event name.
      *
      * @param string $eventName
-     * @return boolean
+     * @return bool
      */
     public final function test(string $eventName): bool
     {
-        return (boolean) preg_match($this->regex, $eventName);
+        return (bool) preg_match($this->regex, $eventName);
     }
 
     /**
