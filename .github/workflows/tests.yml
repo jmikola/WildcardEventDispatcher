@@ -1,0 +1,46 @@
+name: Tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    name: "PHPUnit tests"
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - "ubuntu-20.04"
+        php-version:
+          - "7.2"
+          - "7.3"
+          - "7.4"
+          - "8.0"
+          - "8.1"
+          - "8.2"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          coverage: "none"
+          ini-values: "zend.assertions=1"
+
+      - name: "Install dependencies with Composer"
+        uses: "ramsey/composer-install@2.2.0"
+        with:
+          composer-options: "--no-suggest"
+
+      - name: "Run PHPUnit"
+        run: "vendor/bin/phpunit -v"
