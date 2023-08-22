@@ -69,7 +69,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
      */
     public function hasListeners($eventName = null)
     {
-        return (boolean) count($this->getListeners($eventName));
+        return (bool) count($this->getListeners($eventName));
     }
 
     /**
@@ -130,7 +130,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
      * Checks whether a string contains any wildcard characters.
      *
      * @param string $subject
-     * @return boolean
+     * @return bool
      */
     protected function hasWildcards($subject)
     {
