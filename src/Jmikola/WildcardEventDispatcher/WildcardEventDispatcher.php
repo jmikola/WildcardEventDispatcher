@@ -45,7 +45,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::getListeners()
      */
-    public function getListeners($eventName = null)
+    public function getListeners($eventName = null): array
     {
         if (null !== $eventName) {
             $this->bindPatterns($eventName);
@@ -67,7 +67,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::hasListeners()
      */
-    public function hasListeners($eventName = null)
+    public function hasListeners($eventName = null): bool
     {
         return (bool) count($this->getListeners($eventName));
     }
@@ -75,9 +75,9 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::addListener()
      */
-    public function addListener($eventName, $listener, $priority = 0)
+    public function addListener($eventName, $listener, $priority = 0): void
     {
-        return $this->hasWildcards($eventName)
+        $this->hasWildcards($eventName)
             ? $this->addListenerPattern(new ListenerPattern($eventName, $listener, $priority))
             : $this->dispatcher->addListener($eventName, $listener, $priority);
     }
@@ -85,9 +85,9 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::removeListener()
      */
-    public function removeListener($eventName, $listener)
+    public function removeListener($eventName, $listener): void
     {
-        return $this->hasWildcards($eventName)
+        $this->hasWildcards($eventName)
             ? $this->removeListenerPattern($eventName, $listener)
             : $this->dispatcher->removeListener($eventName, $listener);
     }
@@ -95,7 +95,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::addSubscriber()
      */
-    public function addSubscriber(EventSubscriberInterface $subscriber)
+    public function addSubscriber(EventSubscriberInterface $subscriber): void
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
             if (is_string($params)) {
@@ -113,7 +113,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::removeSubscriber()
      */
-    public function removeSubscriber(EventSubscriberInterface $subscriber)
+    public function removeSubscriber(EventSubscriberInterface $subscriber): void
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
             if (is_array($params) && is_array($params[0])) {
@@ -206,7 +206,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
      * @see EventDispatcherInterface::getListenerPriority()
      * @throws InvalidArgumentException if $eventName contains a wildcard pattern
      */
-    public function getListenerPriority($eventName, $listener)
+    public function getListenerPriority($eventName, $listener): ?int
     {
         if ($this->hasWildcards($eventName)) {
             throw new InvalidArgumentException('Wildcard patterns are not supported');
