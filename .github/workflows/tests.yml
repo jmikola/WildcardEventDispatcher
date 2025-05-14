@@ -28,6 +28,12 @@ jobs:
           - "8.2"
           - "8.3"
           - "8.4"
+        dependency-versions:
+          - "highest"
+        include:
+          - os: "ubuntu-latest"
+            php-version: "7.2"
+            dependency-versions: "lowest"
 
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +49,7 @@ jobs:
         uses: "ramsey/composer-install@v3"
         with:
           composer-options: "--no-suggest"
+          dependency-versions: ${{ matrix.dependency-versions }}
 
       - name: "Run PHPUnit"
         run: "vendor/bin/phpunit -v"
