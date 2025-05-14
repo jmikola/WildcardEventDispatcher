@@ -48,7 +48,6 @@ jobs:
       - name: "Install dependencies with Composer"
         uses: "ramsey/composer-install@v3"
         with:
-          composer-options: "--no-suggest"
           dependency-versions: ${{ matrix.dependency-versions }}
 
       - name: "Run PHPUnit"
