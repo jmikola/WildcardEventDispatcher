@@ -1,7 +1,5 @@
 # WildcardEventDispatcher
 
-[![Build Status](https://travis-ci.org/jmikola/WildcardEventDispatcher.png?branch=master)](https://travis-ci.org/jmikola/WildcardEventDispatcher)
-
 This library implements an event dispatcher, based on [Symfony's interface][],
 with wildcard syntax inspired by AMQP topic exchanges. Listeners may be bound to
 a wildcard pattern and be notified if a dispatched event's name matches that
