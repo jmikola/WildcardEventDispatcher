@@ -21,7 +21,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
      *
      * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(EventDispatcherInterface $dispatcher = null)
+    public function __construct(?EventDispatcherInterface $dispatcher = null)
     {
         $this->dispatcher = $dispatcher ?: new EventDispatcher();
     }
@@ -29,7 +29,7 @@ class WildcardEventDispatcher implements EventDispatcherInterface
     /**
      * @see EventDispatcherInterface::dispatch()
      */
-    public function dispatch($event, string $eventName = null): object
+    public function dispatch($event, ?string $eventName = null): object
     {
         /* The event object's FQCN is used in lieu of an event name; however, it
          * is not compatible with the wildcard syntax used by this library. As
